@@ -4,6 +4,7 @@ from rest_framework import status
 from api.models import UrlLinks
 from api.serializer import LinkSerialisers
 import requests
+from rest_framework.response import Response
 # Create your views here.
 
 
@@ -14,8 +15,8 @@ class ShortUrl(APIView):
         response = requests.get(api_url)
         UrlLinks.objects.create(
           full_url=url,
-          short_url=response
+          short_url=response.text
         )
-        return {"data":response,"message":"short url created.","status":status.HTTP_200_OK}
+        return Response({"data":response,"message":"short url created.","status":status.HTTP_200_OK})
 
 
