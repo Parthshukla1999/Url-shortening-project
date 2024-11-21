@@ -13,11 +13,16 @@ class ShortUrl(APIView):
         url = request.data["url"]
         api_url = f"https://tinyurl.com/api-create.php?url={url}"
         response = requests.get(api_url)
-        UrlLinks.objects.create(
+        link =UrlLinks.objects.create(
           full_url=url,
           short_url=response.text
         )
-        return Response({"data":response,"message":"short url created.","status":status.HTTP_200_OK})
+        data = {
+            "long_link":link.full_url,
+            "short_link": link.short_url,
+            "id": link.id
+        }
+        return Response({"data":data,"message":"short url created.","status":status.HTTP_200_OK})
     
 class getOldUrlBy_id(APIView):
     def get(self, request, id):
